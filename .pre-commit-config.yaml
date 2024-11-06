@@ -17,6 +17,14 @@ repos:
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.13.0
     hooks:
-    -   id: mypy
-        additional_dependencies: [types-pyyaml]
-        exclude: ^testing/resources/
+    - id: mypy
+      additional_dependencies: [types-seaborn, polars, pandas]
+      args: ["--ignore-missing-imports", "--strict"]
+
+     # pre-commit runs each hook in an isolated environment,
+     # which doesn’t automatically include the main project dependencies.
+     # When running mypy through pre-commit, any libraries you use in your project
+     # (like pandas, polars, etc.) need to be explicitly installed in this isolated environment.
+     # By listing these libraries in additional_dependencies, you ensure that
+     # mypy has access to them during the type-checking process.
+     # Without them, mypy would raise errors for missing imports.
